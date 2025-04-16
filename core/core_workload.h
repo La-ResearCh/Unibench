@@ -5,6 +5,7 @@
 //  Copyright (c) 2020 Youngjae Lee <ls4154.lee@gmail.com>.
 //  Copyright (c) 2014 Jinglei Ren <jinglei@ren.systems>.
 //  Modifications Copyright 2023 Chengye YU <yuchengye2013 AT outlook.com>.
+//  Modifications Copyright 2025 Zeren Liu <lrcno6@foxmail.com>.
 //
 
 #ifndef YCSB_C_CORE_WORKLOAD_H_
@@ -19,28 +20,11 @@
 #include "acknowledged_counter_generator.h"
 #include "utils/properties.h"
 #include "utils/utils.h"
+#include "workload.h"
 
 namespace ycsbc {
 
-enum Operation {
-  INSERT = 0,
-  READ,
-  UPDATE,
-  SCAN,
-  READMODIFYWRITE,
-  DELETE,
-  INSERT_FAILED,
-  READ_FAILED,
-  UPDATE_FAILED,
-  SCAN_FAILED,
-  READMODIFYWRITE_FAILED,
-  DELETE_FAILED,
-  MAXOPTYPE
-};
-
-extern const char *kOperationString[MAXOPTYPE];
-
-class CoreWorkload {
+class CoreWorkload: public Workload {
  public:
   ///
   /// The name of the database table to run queries against.
@@ -150,9 +134,6 @@ class CoreWorkload {
   ///
   static const std::string INSERT_ORDER_PROPERTY;
   static const std::string INSERT_ORDER_DEFAULT;
-
-  static const std::string INSERT_START_PROPERTY;
-  static const std::string INSERT_START_DEFAULT;
 
   static const std::string RECORD_COUNT_PROPERTY;
   static const std::string OPERATION_COUNT_PROPERTY;

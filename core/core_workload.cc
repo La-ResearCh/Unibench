@@ -5,6 +5,7 @@
 //  Copyright (c) 2020 Youngjae Lee <ls4154.lee@gmail.com>.
 //  Copyright (c) 2014 Jinglei Ren <jinglei@ren.systems>.
 //  Modifications Copyright 2023 Chengye YU <yuchengye2013 AT outlook.com>.
+//  Modifications Copyright 2025 Zeren Liu <lrcno6@foxmail.com>.
 //
 
 #include "uniform_generator.h"
@@ -88,9 +89,6 @@ const string CoreWorkload::SCAN_LENGTH_DISTRIBUTION_DEFAULT = "uniform";
 
 const string CoreWorkload::INSERT_ORDER_PROPERTY = "insertorder";
 const string CoreWorkload::INSERT_ORDER_DEFAULT = "hashed";
-
-const string CoreWorkload::INSERT_START_PROPERTY = "insertstart";
-const string CoreWorkload::INSERT_START_DEFAULT = "0";
 
 const string CoreWorkload::RECORD_COUNT_PROPERTY = "recordcount";
 const string CoreWorkload::OPERATION_COUNT_PROPERTY = "operationcount";
