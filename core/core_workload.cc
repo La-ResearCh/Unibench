@@ -16,6 +16,7 @@
 #include "core_workload.h"
 #include "random_byte_generator.h"
 #include "utils/utils.h"
+#include "workload_factory.h"
 
 #include <algorithm>
 #include <random>
@@ -355,5 +356,11 @@ DB::Status CoreWorkload::TransactionInsert(DB &db) {
   transaction_insert_key_sequence_->Acknowledge(key_num);
   return s;
 }
+
+Workload* NewCoreWorkload() {
+  return new CoreWorkload();
+}
+
+const static bool registered = ycsbc::WorkloadFactory::RegisterWorkload("CoreWorkload", NewCoreWorkload);
 
 } // ycsbc

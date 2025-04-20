@@ -20,7 +20,7 @@
 
 namespace ycsbc {
 
-inline int ClientThread(ycsbc::DB *db, ycsbc::CoreWorkload *wl, const int num_ops, bool is_loading,
+inline int ClientThread(ycsbc::DB *db, ycsbc::Workload *wl, const int num_ops, bool is_loading,
                         bool init_db, bool cleanup_db, utils::CountDownLatch *latch, utils::RateLimiter *rlim) {
 
   try {

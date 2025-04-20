@@ -21,6 +21,7 @@
 #include "core_workload.h"
 #include "db_factory.h"
 #include "measurements.h"
+#include "workload_factory.h"
 #include "utils/countdown_latch.h"
 #include "utils/rate_limit.h"
 #include "utils/timer.h"
@@ -113,8 +114,8 @@ int main(const int argc, const char *argv[]) {
     dbs.push_back(db);
   }
 
-  ycsbc::CoreWorkload wl;
-  wl.Init(props);
+  ycsbc::Workload *pwl = ycsbc::WorkloadFactory::CreateWorkload(&props);
+  ycsbc::Workload &wl = *pwl;
 
   // print status periodically
   const bool show_status = (props.GetProperty("status", "false") == "true");
@@ -226,6 +227,7 @@ int main(const int argc, const char *argv[]) {
   for (int i = 0; i < num_threads; i++) {
     delete dbs[i];
   }
+  delete pwl;
 }
 
 void ParseCommandLine(int argc, const char *argv[], ycsbc::utils::Properties &props) {
