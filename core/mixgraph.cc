@@ -7,8 +7,8 @@
 
 static std::string build_key(uint64_t key_num, size_t key_size) {
     std::string key_suf = std::to_string(key_num);
-    std::string key_pre(key_size > key_suf.size() ? key_size - key_suf.size() : 0, '0');
-    return key_pre + key_suf;
+    std::string key_pre(key_size > key_suf.size() + 4 ? key_size - key_suf.size() - 4 : 0, '0');
+    return "user" + key_pre + key_suf;
 }
 
 static std::vector<ycsbc::DB::Field> build_values(uint64_t value_size) {
