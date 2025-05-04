@@ -1,4 +1,5 @@
 # Copyright 2023 Chengye YU <yuchengye2013 AT outlook.com>.
+# Modifications Copyright 2025 Zeren Liu <lrcno6@foxmail.com>.
 # SPDX-License-Identifier: Apache-2.0
 
 cmake_minimum_required(VERSION 3.10)

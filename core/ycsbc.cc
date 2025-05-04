@@ -4,6 +4,7 @@
 //
 //  Copyright (c) 2020 Youngjae Lee <ls4154.lee@gmail.com>.
 //  Copyright (c) 2014 Jinglei Ren <jinglei@ren.systems>.
+//  Modifications Copyright 2025 Zeren Liu <lrcno6@foxmail.com>.
 //
 
 #include <cstring>
