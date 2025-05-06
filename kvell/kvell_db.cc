@@ -102,7 +102,7 @@ static void read_cb(slab_callback *cb, void *item) {
     auto payload = static_cast<payload_t*>(cb->param);
     auto item_meta = static_cast<item_metadata*>(item);
     std::vector<ycsbc::DB::Field> result;
-    if (item) {
+    if (item && item_meta->key_size != -1) {
         char *value = static_cast<char*>(item) + sizeof(item_metadata) + item_meta->key_size;
         char *value_end = value + item_meta->value_size;
         if (payload->second)
@@ -125,8 +125,13 @@ static void delete_cb(slab_callback *cb, void *item) {
 
 void ycsbc::KvellDB::Init() {
     std::lock_guard<std::mutex> lock(init_mutex);
-    if (ref_cnt++ == 0)
-        slab_workers_init(1, 1);
+    if (ref_cnt++ == 0) {
+        DB_PATH = strdup(props_->GetProperty("kvell.dbname", "/scratch%lu/kvell").c_str());
+        PAGE_CACHE_SIZE = std::stoull(props_->GetProperty("kvell.cache_size", "32212254720"));
+        int nb_disks = std::stoi(props_->GetProperty("kvell.nb_disks", "1"));
+        int nb_workers_per_disk = std::stoi(props_->GetProperty("kvell.nb_workers_per_disk", "16"));
+        slab_workers_init(nb_disks, nb_workers_per_disk);
+    }
 }
 
 void ycsbc::KvellDB::Cleanup() {
