@@ -46,10 +46,10 @@ void ycsbc::MixGraph::Init(const utils::Properties &p) {
                                                     prefix_a, prefix_b, prefix_c, prefix_d,
                                                     key_dist_a, key_dist_b);
     
-    double value_len_theta = std::stod(p.GetProperty("value_len_theta", "0"));
-    double value_len_k = std::stod(p.GetProperty("value_len_k", "0.2615"));
-    double value_len_sigma = std::stod(p.GetProperty("value_len_sigma", "25.45"));
-    value_len_gen = std::make_unique<ParetoGenerator>(value_len_theta, value_len_k, value_len_sigma);
+    double value_size_theta = std::stod(p.GetProperty("value_size_theta", "0"));
+    double value_size_k = std::stod(p.GetProperty("value_size_k", "0.2615"));
+    double value_size_sigma = std::stod(p.GetProperty("value_size_sigma", "25.45"));
+    value_size_gen = std::make_unique<ParetoGenerator>(value_size_theta, value_size_k, value_size_sigma);
     
     double scan_len_theta = std::stod(p.GetProperty("scan_len_theta", "0"));
     double scan_len_k = std::stod(p.GetProperty("scan_len_k", "2.517"));
@@ -58,6 +58,8 @@ void ycsbc::MixGraph::Init(const utils::Properties &p) {
     
     key_size = std::stoull(p.GetProperty("keysize", "16"));
     insert_value_size = std::stoull(p.GetProperty("insert_valuesize", "100"));
+    valuesize_max = std::stoull(p.GetProperty("valuesize_max", "1024"));
+    scanlen_max = std::stoull(p.GetProperty("scanlen_max", "10000"));
     
     table_name = p.GetProperty("table", "usertable");
 }
@@ -91,7 +93,7 @@ bool ycsbc::MixGraph::TransactionRead(DB &db) {
 
 bool ycsbc::MixGraph::TransactionInsert(DB &db) {
     std::string key = build_key(key_gen->Next(), key_size);
-    uint64_t value_size = value_len_gen->Next();
+    uint64_t value_size = std::min(value_size_gen->Next(), valuesize_max);
     std::vector<DB::Field> values = build_values(value_size);
     auto status = db.Insert(table_name, key, values);
     return status == DB::kOK;
@@ -99,7 +101,7 @@ bool ycsbc::MixGraph::TransactionInsert(DB &db) {
 
 bool ycsbc::MixGraph::TransactionScan(DB &db) {
     std::string key = build_key(key_gen->Next(), key_size);
-    size_t scan_len = scan_len_gen->Next();
+    size_t scan_len = std::min(scan_len_gen->Next(), scanlen_max);
     std::vector<std::vector<DB::Field>> result;
     auto status = db.Scan(table_name, key, scan_len, nullptr, result);
     return status == DB::kOK;
