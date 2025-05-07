@@ -8,8 +8,8 @@
 ycsbc::TwoTermExpGenerator::TwoTermExpGenerator(uint64_t min, uint64_t max, uint64_t keyrange_num,
                                                 double prefix_a, double prefix_b, double prefix_c, double prefix_d,
                                                 double key_dist_a, double key_dist_b) {
-    a = key_dist_a;
-    b = key_dist_b;
+    a_rec = 1.0 / key_dist_a;
+    b_rec = 1.0 / key_dist_b;
     
     std::vector<double> weights;
     weights.reserve(keyrange_num);
@@ -44,7 +44,7 @@ uint64_t ycsbc::TwoTermExpGenerator::Next() {
     }) - 1;
 
     double u = std::uniform_real_distribution<double>(0, 1)(gen);
-    uint64_t seed = pow(u / a, 1.0 / b);
+    uint64_t seed = pow(u * a_rec, b_rec);
     std::mt19937_64 tmpgen(seed);
     last = std::uniform_int_distribution<uint64_t>(iter->k_start, iter->k_start + iter->k_num - 1)(tmpgen);
     return last;

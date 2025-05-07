@@ -12,11 +12,12 @@ class ParetoGenerator : public Generator<uint64_t> {
             m_theta = theta;
             m_k = k;
             m_sigma = sigma;
+            k_rec = 1.0 / k;
         }
         virtual ~ParetoGenerator() = default;
 
         uint64_t Next() override {
-            last = ceil(m_theta + m_sigma * (pow(dist(gen), -m_k) - 1) / m_k);
+            last = ceil(m_theta + m_sigma * (pow(dist(gen), -m_k) - 1) * k_rec);
             return last;
         }
         uint64_t Last() override { return last; }
@@ -27,6 +28,7 @@ class ParetoGenerator : public Generator<uint64_t> {
         double m_theta;
         double m_k;
         double m_sigma;
+        double k_rec;
 
         uint64_t last;
 };

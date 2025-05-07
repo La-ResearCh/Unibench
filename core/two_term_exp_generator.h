@@ -24,7 +24,7 @@ class TwoTermExpGenerator : public Generator<uint64_t> {
             uint64_t k_num;
         };
         std::vector<KeyrangeEntry> keyranges;
-        double a, b;
+        double a_rec, b_rec;
         std::mt19937_64 gen;
         uint64_t last;
 };
