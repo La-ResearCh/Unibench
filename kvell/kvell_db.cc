@@ -145,7 +145,7 @@ void ycsbc::KvellDB::Cleanup() {
 ycsbc::DB::Status ycsbc::KvellDB::Read(const std::string &table, const std::string &key,
                                        const std::vector<std::string> *fields,
                                        std::vector<DB::Field> &result) {
-    uint64_t key_num = atoll(key.c_str() + 4);
+    uint64_t key_num = std::stoull(key.substr(4));
     slab_callback *cb = build_callback(key_num, "");
     payload_t payload;
     payload.second = fields;
@@ -163,7 +163,7 @@ ycsbc::DB::Status ycsbc::KvellDB::Read(const std::string &table, const std::stri
 ycsbc::DB::Status ycsbc::KvellDB::Scan(const std::string &table, const std::string &key,
                                        int record_count, const std::vector<std::string> *fields,
                                        std::vector<std::vector<DB::Field>> &result) {
-    uint64_t key_num = atoll(key.c_str() + 4);
+    uint64_t key_num = std::stoull(key.substr(4));
     std::unique_ptr<char[]> item(build_item(key_num, ""));
     auto scan_res = kv_init_scan(item.get(), record_count);
     item.reset();
@@ -190,7 +190,7 @@ ycsbc::DB::Status ycsbc::KvellDB::Scan(const std::string &table, const std::stri
 
 ycsbc::DB::Status ycsbc::KvellDB::Insert(const std::string &table, const std::string &key,
                                          std::vector<DB::Field> &values) {
-    uint64_t key_num = atoll(key.c_str() + 4);
+    uint64_t key_num = std::stoull(key.substr(4));
     std::string value;
     SerializeRow(values, value);
     auto cb = build_callback(key_num, value);
@@ -201,7 +201,7 @@ ycsbc::DB::Status ycsbc::KvellDB::Insert(const std::string &table, const std::st
 
 ycsbc::DB::Status ycsbc::KvellDB::Update(const std::string &table, const std::string &key,
                                          std::vector<DB::Field> &values) {
-    uint64_t key_num = atoll(key.c_str() + 4);
+    uint64_t key_num = std::stoull(key.substr(4));
     payload_t payload;
     payload.second = nullptr;
     auto cb1 = build_callback(key_num, "");
@@ -235,7 +235,7 @@ ycsbc::DB::Status ycsbc::KvellDB::Update(const std::string &table, const std::st
 }
 
 ycsbc::DB::Status ycsbc::KvellDB::Delete(const std::string &table, const std::string &key) {
-    uint64_t key_num = atoll(key.c_str() + 4);
+    uint64_t key_num = std::stoull(key.substr(4));
     auto cb = build_callback(key_num, "");
     cb->cb = delete_cb;
     kv_remove_async(cb);
